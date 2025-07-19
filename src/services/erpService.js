@@ -7,7 +7,7 @@ const sendToERP = async (orderData) => {
     const response = await axios.post(ERP_ENDPOINT_URL, orderData);
     return response;
   } catch (error) {
-    console.error('❌ Error sending data to ERP:', error.message);
+    console.error('Error sending data to ERP:', error.message);
     throw error;
   }
 };

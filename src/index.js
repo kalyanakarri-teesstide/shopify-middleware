@@ -1,15 +1,32 @@
+// src/index.js
 const express = require('express');
-const app = express();
-const webhookRoute = require('./webhook');
-
+const bodyParser = require('body-parser');
 require('dotenv').config();
 
-app.use(express.json());
+const app = express();
+const PORT = process.env.PORT || 10000;
 
-// Your webhook endpoint
-app.use('/webhook', webhookRoute);
+app.use(bodyParser.json());
 
-const PORT = process.env.PORT || 3000;
+app.post('/webhook', (req, res) => {
+  const order = req.body;
+
+  const erpOrder = {
+    erp_order_id: order.id,
+    customer_name: `${order.customer?.first_name ?? ''} ${order.customer?.last_name ?? ''}`,
+    items: order.line_items?.map(item => ({
+      name: item.title,
+      qty: item.quantity
+    })),
+    total: order.total_price
+  };
+
+  console.log("Webhook Received. Sending this to ERP:", erpOrder);
+
+  // Simulate sending to ERP here
+  res.status(200).json({ status: 'success', message: 'Order synced to ERP' });
+});
+
 app.listen(PORT, () => {
-  console.log(`🚀 Server running on port ${PORT}`);
+  console.log(`Server running on port ${PORT}`);
 });

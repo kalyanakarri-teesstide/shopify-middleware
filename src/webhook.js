@@ -15,9 +15,9 @@ router.post('/webhook', express.json(), (req, res) => {
     total: order.total_price
   };
 
-  console.log("✅ Webhook received. Order:", erpOrder);
+  console.log("Webhook received. Order:", erpOrder);
 
-  res.status(200).json({ message: "✅ Order received", order: erpOrder });
+  res.status(200).json({ message: "Order received", order: erpOrder });
 });
 
 module.exports = router;
