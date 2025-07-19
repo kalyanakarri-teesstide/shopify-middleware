@@ -15,11 +15,11 @@ export default async function handler(req, res) {
     total: order.total_price
   };
 
-  console.log("🟢 Webhook Received. Sending this to ERP:", erpOrder);
+  console.log("✅ Synced to ERP:", erpOrder);
 
   return res.status(200).json({
     status: "success",
-    message: "✅ Order synced to ERP",
+    message: "Order synced",
     data: erpOrder
   });
 }
