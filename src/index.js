@@ -1,11 +1,18 @@
 // src/index.js
 const express = require('express');
 const bodyParser = require('body-parser');
+const cors = require('cors'); 
 const { sendToERP } = require('./services/erpService');
 require('dotenv').config();
 
 const app = express();
 const PORT = process.env.PORT || 10000;
+
+app.use(cors({
+  origin: 'http://localhost:3000',
+  methods: ['GET', 'POST'],
+  allowedHeaders: ['Content-Type']
+}));
 
 app.use(bodyParser.json());
 
