@@ -1,16 +1,25 @@
-// api/webhook.js
-
-export default function handler(req, res) {
-  if (req.method === 'POST') {
-    console.log('Received webhook:', req.body);
-
-    // Sample response
-    res.status(200).json({
-      status: 'success',
-      message: 'Webhook received',
-      received: req.body
-    });
-  } else {
-    res.status(405).json({ error: 'Method not allowed' });
+export default async function handler(req, res) {
+  if (req.method !== 'POST') {
+    return res.status(405).json({ message: 'Only POST requests allowed' });
   }
+
+  const order = req.body;
+
+  const erpOrder = {
+    erp_order_id: order.id,
+    customer_name: `${order.customer?.first_name ?? ''} ${order.customer?.last_name ?? ''}`,
+    items: order.line_items?.map(item => ({
+      name: item.title,
+      qty: item.quantity
+    })),
+    total: order.total_price
+  };
+
+  console.log("🟢 Webhook Received. Sending this to ERP:", erpOrder);
+
+  return res.status(200).json({
+    status: "success",
+    message: "✅ Order synced to ERP",
+    data: erpOrder
+  });
 }
