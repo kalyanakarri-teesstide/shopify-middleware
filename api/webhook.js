@@ -1,30 +1,13 @@
-export default async function handler(req, res) {
-  if (req.method !== 'POST') {
-    return res.status(405).json({ message: 'Only POST requests are allowed' });
-  }
-
-  try {
-    const order = req.body;
-
-    const erpOrder = {
-      erp_order_id: order.id,
-      customer_name: `${order.customer?.first_name ?? ''} ${order.customer?.last_name ?? ''}`,
-      items: order.line_items?.map(item => ({
-        name: item.title,
-        qty: item.quantity
-      })),
-      total: order.total_price
-    };
-
-    console.log("✅ Webhook Order Received:", erpOrder);
+export default function handler(req, res) {
+  if (req.method === 'POST') {
+    console.log('✅ Webhook received:', req.body);
 
     return res.status(200).json({
       status: "success",
-      message: "✅ Order synced to ERP",
-      data: erpOrder
+      message: "Webhook received successfully",
+      order: req.body
     });
-  } catch (err) {
-    console.error("❌ Error in webhook:", err);
-    return res.status(500).json({ message: "Internal Server Error" });
   }
+
+  res.status(405).json({ error: 'Method Not Allowed' });
 }
