@@ -5,15 +5,15 @@ import { sendToERP } from '../src/services/erpService.js';
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method Not Allowed' });
+    return res.status(405).json({ error: 'Method Not Allowed. Use POST.' });
   }
 
   try {
     const orders = await fetchShopifyOrders();
 
-    const results = [];
+    const synced = [];
 
-    for (let order of orders) {
+    for (const order of orders) {
       const erpOrder = {
         erp_order_id: order.id,
         customer_name: `${order.customer?.first_name ?? ''} ${order.customer?.last_name ?? ''}`,
@@ -25,16 +25,21 @@ export default async function handler(req, res) {
       };
 
       const response = await sendToERP(erpOrder);
-      results.push({
-        order_id: erpOrder.erp_order_id,
+
+      synced.push({
+        id: erpOrder.erp_order_id,
         erp_response: response.data
       });
     }
 
-    res.status(200).json({ message: '✅ Orders Synced', results });
+    return res.status(200).json({
+      status: '✅ Synced',
+      count: synced.length,
+      synced
+    });
 
   } catch (err) {
-    console.error('❌ Error syncing orders:', err.message);
-    res.status(500).json({ error: 'Internal Server Error', detail: err.message });
+    console.error('❌ Error syncing:', err.message);
+    return res.status(500).json({ error: err.message });
   }
 }
