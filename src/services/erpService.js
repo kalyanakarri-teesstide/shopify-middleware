@@ -1,13 +1,19 @@
-const axios = require('axios');
+const axios = require("axios");
 
-const sendToERP = async (orderData) => {
-  const { ERP_ENDPOINT_URL } = process.env;
+const ERP_ENDPOINT_URL = process.env.ERP_ENDPOINT_URL;
 
+const sendToERP = async (order) => {
   try {
-    const response = await axios.post(ERP_ENDPOINT_URL, orderData);
+    const response = await axios.post(ERP_ENDPOINT_URL, order, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    console.log("ERP Response:", response.status, response.statusText);
     return response;
   } catch (error) {
-    console.error('Error sending data to ERP:', error.message);
+    console.error("ERP API Error:", error.response?.data || error.message);
     throw error;
   }
 };

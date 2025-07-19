@@ -1,14 +1,14 @@
-// src/index.js
 const express = require('express');
 const bodyParser = require('body-parser');
 require('dotenv').config();
+const { sendToERP } = require('./services/erpService');
 
 const app = express();
 const PORT = process.env.PORT || 10000;
 
 app.use(bodyParser.json());
 
-app.post('/webhook', (req, res) => {
+app.post('/webhook', async (req, res) => {
   const order = req.body;
 
   const erpOrder = {
@@ -23,8 +23,23 @@ app.post('/webhook', (req, res) => {
 
   console.log("Webhook Received. Sending this to ERP:", erpOrder);
 
-  // Simulate sending to ERP here
-  res.status(200).json({ status: 'success', message: 'Order synced to ERP' });
+  try {
+    const response = await sendToERP(erpOrder);
+    console.log('ERP API Success:', response.statusText);
+
+    res.status(200).json({
+      status: 'success',
+      message: 'Order synced to ERP',
+      data: erpOrder
+    });
+  } catch (error) {
+    console.error('Failed to sync to ERP:', error.message);
+
+    res.status(500).json({
+      status: 'error',
+      message: 'Failed to sync order to ERP'
+    });
+  }
 });
 
 app.listen(PORT, () => {
