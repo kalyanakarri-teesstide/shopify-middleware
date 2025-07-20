@@ -1,38 +1,48 @@
+---
+
+##  `CHALLENGES.md` (1-page note)
+
+```markdown
 # Challenges Faced – Shopify Middleware Assignment
 
-### 1. **Shopify API Credentials and Authentication**
-- Issue: Initially, Shopify access tokens were accidentally committed, causing GitHub to block the push.
-- Solution: Used `.gitignore` to exclude `.env`, cleaned Git history, and followed secure credential management best practices.
+### 1. Shopify Credentials & GitHub Push Block
+- **Issue**: Accidentally committed `.env` file containing tokens, causing GitHub to block pushes due to detected secrets.
+- **Solution**: Removed secrets from Git history, updated `.gitignore`, and ensured proper use of `.env` files going forward.
 
 ---
 
-### 2. **Webhook.site – Understanding Response & Request Behavior**
-- Issue: Webhook.site didn't show expected order content.
-- Solution: Realized Webhook.site only shows request bodies dynamically. Used `{{request.body}}` for dynamic rendering, and understood it doesn’t persist order history.
+### 2. Webhook.site Dynamic Rendering Confusion
+- **Issue**: Expected to see historical orders in Webhook.site, but only live data is shown.
+- **Solution**: Realized that Webhook.site is a live logging tool, not a storage system. Confirmed incoming payloads using live tabs.
 
 ---
 
-### 3. **PowerShell Script Blocking NPM**
-- Issue: `npm` commands didn’t run due to PowerShell execution policies.
-- Solution: Switched to regular Command Prompt (`cmd`) instead of PowerShell for Node/NPM commands.
+### 3. PowerShell Blocks NPM Scripts
+- **Issue**: PowerShell restricted running `npm run` commands.
+- **Solution**: Switched to regular CMD or used `Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass` in PowerShell.
 
 ---
 
-### 4. **Shopify Orders Not Appearing Initially**
-- Issue: Middleware was not logging orders at first.
-- Solution: Created new test orders manually inside the Shopify admin, verified fulfillment, and order visibility using API and webhook log.
+### 4. Shopify Orders Not Logging
+- **Issue**: Backend received no payloads initially.
+- **Solution**: Created manual test orders in Shopify, ensured webhook delivery, and added logging in backend to debug.
 
 ---
 
-### 5. **Git & GitHub Errors**
-- Issue: GitHub rejected push due to secret detection.
-- Solution: Cleaned `.env` from commits and followed GitHub’s guidance on push protection rules.
+### 5. React Frontend Not Updating
+- **Issue**: CORS issues when calling backend from deployed frontend.
+- **Solution**: Updated backend CORS config to whitelist both local and deployed frontend origins.
 
 ---
 
-### ✅ Final Note:
-The project now correctly:
-- Fetches Shopify orders
-- Transforms and posts them to a mock ERP system (Webhook.site)
-- Handles logging and error messages
+### 6. Render Static Build Issues
+- **Issue**: React build failed due to missing `web-vitals` and version mismatches.
+- **Solution**: Installed required packages (`web-vitals`, correct `react-toastify` version) and ran `npm run build` before deploying.
+
+---
+
+### Result
+- Fully functional backend and frontend
+- Orders flow from Shopify → Middleware → ERP (mock)
+- Displayed live on frontend with Toast notifications
 

@@ -8,10 +8,25 @@ require('dotenv').config();
 const app = express();
 const PORT = process.env.PORT || 10000;
 
+// Allow both local and deployed frontend URLs
+const allowedOrigins = [
+  'http://localhost:3000',
+  'https://shopify-frontend-lkb7.onrender.com'
+];
+
 app.use(cors({
-  origin: 'http://localhost:3000',
+  origin: function (origin, callback) {
+    // allow requests with no origin (like mobile apps, curl, Postman)
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    } else {
+      return callback(new Error('Not allowed by CORS'));
+    }
+  },
   methods: ['GET', 'POST'],
-  allowedHeaders: ['Content-Type']
+  allowedHeaders: ['Content-Type'],
+  credentials: true,
 }));
 
 app.use(bodyParser.json());
@@ -54,7 +69,7 @@ app.post('/webhook', async (req, res) => {
   }
 });
 
-// This is the route  frontend calls
+// This is the route frontend calls
 app.get('/orders', (req, res) => {
   res.status(200).json(syncedOrders);
 });
