@@ -1,8 +1,11 @@
 require('dotenv').config();
 const express = require('express');
 const router = express.Router();
-const { log, error } = require('../utils/logger');
-router.post('/webhook', express.json(), (req, res) => {
+const Order = require('./models/Order');
+
+const { log } = require('./utils/logger');
+
+router.post('/webhook', express.json(), async (req, res) => {
   const order = req.body;
 
   const erpOrder = {
@@ -15,9 +18,24 @@ router.post('/webhook', express.json(), (req, res) => {
     total: order.total_price
   };
 
-  log("Webhook received. Order:", erpOrder);
+  try {
+    const savedOrder = await Order.create(erpOrder);
+    log("Order saved:", savedOrder);
+    res.status(200).json({ message: "Order received and saved", order: savedOrder });
+  } catch (err) {
+    console.error("Error saving order to MongoDB:", err);
+    res.status(500).json({ message: "Error saving order" });
+  }
+});
 
-  res.status(200).json({ message: "Order received", order: erpOrder });
+// API to get all orders for frontend
+router.get('/orders', async (req, res) => {
+  try {
+    const orders = await Order.find().sort({ createdAt: -1 });
+    res.status(200).json(orders);
+  } catch (err) {
+    res.status(500).json({ message: "Error fetching orders" });
+  }
 });
 
 module.exports = router;
