@@ -1,6 +1,6 @@
 # Shopify Middleware Service
 
-This is a Node.js-based backend service that receives Shopify order webhooks and forwards the order data to a mock ERP system. It also exposes an API endpoint (`/orders`) to fetch the synced orders for display in a frontend UI.
+This Node.js-based backend service receives Shopify order webhooks and forwards the order data to a mock ERP system. It also stores synced orders in MongoDB and exposes an API endpoint (/orders) to fetch them for display in a frontend UI.
 
 ---
 
@@ -11,6 +11,7 @@ This is a Node.js-based backend service that receives Shopify order webhooks and
 - Sends the transformed order to a mock ERP (Webhook.site or real ERP endpoint).
 - Stores synced orders in memory.
 - Provides a GET `/orders` endpoint for a frontend to display synced orders.
+- Stores synced orders in MongoDB.
 
 ---
 
@@ -21,7 +22,7 @@ This is a Node.js-based backend service that receives Shopify order webhooks and
 - CORS
 - Axios
 - dotenv
-
+- MongoDB + Mongoose
 ---
 
 ## API Endpoints
