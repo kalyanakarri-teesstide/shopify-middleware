@@ -1,7 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const router = express.Router();
-
+const { log, error } = require('../logger');
 router.post('/webhook', express.json(), (req, res) => {
   const order = req.body;
 
@@ -15,7 +15,7 @@ router.post('/webhook', express.json(), (req, res) => {
     total: order.total_price
   };
 
-  console.log("Webhook received. Order:", erpOrder);
+  log("Webhook received. Order:", erpOrder);
 
   res.status(200).json({ message: "Order received", order: erpOrder });
 });

@@ -1,5 +1,5 @@
 const axios = require("axios");
-
+const { log, error } = require('../logger');
 const ERP_ENDPOINT_URL = process.env.ERP_ENDPOINT_URL;
 
 const sendToERP = async (order) => {
@@ -10,10 +10,10 @@ const sendToERP = async (order) => {
       },
     });
 
-    console.log("ERP Response:", response.status, response.statusText);
+    log("ERP Response:", response.status, response.statusText);
     return response;
   } catch (error) {
-    console.error("ERP API Error:", error.response?.data || error.message);
+    error("ERP API Error:", error.response?.data || error.message);
     throw error;
   }
 };
