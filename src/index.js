@@ -4,7 +4,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const connectDB = require('./utils/db');
 const webhookRoutes = require('./webhook');
-const Order = require('./models/order'); // <-- add this
+const Order = require('./models/Order');// <-- add this
 
 const app = express();
 const PORT = process.env.PORT || 10000;
