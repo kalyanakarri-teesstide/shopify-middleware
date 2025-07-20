@@ -1,7 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const router = express.Router();
-const { log, error } = require('../logger');
+const { log, error } = require('../utils/logger');
 router.post('/webhook', express.json(), (req, res) => {
   const order = req.body;
 

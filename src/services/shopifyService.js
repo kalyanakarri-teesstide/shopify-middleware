@@ -1,5 +1,5 @@
 const axios = require('axios');
-const { log, error } = require('../logger');
+const { log, error } = require('../utils/logger');
 const fetchShopifyOrders = async () => {
   const { SHOPIFY_API_KEY, SHOPIFY_API_PASSWORD, SHOPIFY_STORE_NAME } = process.env;
 

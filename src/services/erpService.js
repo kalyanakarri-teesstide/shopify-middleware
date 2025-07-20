@@ -1,5 +1,5 @@
 const axios = require("axios");
-const { log, error } = require('../logger');
+const { log, error } = require('../utils/logger');
 const ERP_ENDPOINT_URL = process.env.ERP_ENDPOINT_URL;
 
 const sendToERP = async (order) => {
