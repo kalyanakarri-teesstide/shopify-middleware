@@ -1,12 +1,19 @@
+// models/Order.js
 const mongoose = require('mongoose');
 
 const orderSchema = new mongoose.Schema({
-  shop: String,
-  orderId: String,
-  data: Object,
+  erp_order_id: String,
+  customer_name: String,
+  items: [
+    {
+      name: String,
+      qty: Number
+    }
+  ],
+  total: Number,
   createdAt: {
     type: Date,
-    default: Date.now,
+    default: Date.now
   }
 });
 
