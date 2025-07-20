@@ -4,7 +4,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const { sendToERP } = require('./services/erpService');
 require('dotenv').config();
-const { log, error } = require('../utils/logger');
+const { log, error } = require('./utils/logger');
 const app = express();
 const PORT = process.env.PORT || 10000;
 
